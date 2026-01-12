@@ -10,6 +10,13 @@ const corsHeaders = {
 const RATE_LIMIT_MAX_REQUESTS = 10; // 每分钟最大请求数
 const RATE_LIMIT_ENDPOINT = 'resume-ai';
 
+// 检查速率限制是否启用（通过环境变量控制）
+function isRateLimitEnabled(): boolean {
+  const enabled = Deno.env.get('RATE_LIMIT_ENABLED');
+  // 默认关闭，只有明确设置为 'true' 时才启用
+  return enabled === 'true';
+}
+
 // 获取当前分钟窗口标识
 function getCurrentMinuteWindow(): string {
   const now = new Date();
@@ -197,21 +204,23 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     
-    // 检查速率限制
-    const { allowed, remaining } = await checkRateLimit(supabase, clientIP);
-    
-    if (!allowed) {
-      return new Response(JSON.stringify({ 
-        error: '请求过于频繁，请稍后再试（每分钟最多 10 次）' 
-      }), {
-        status: 429,
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json',
-          'X-RateLimit-Limit': String(RATE_LIMIT_MAX_REQUESTS),
-          'X-RateLimit-Remaining': '0',
-        },
-      });
+    // 检查速率限制（可通过 RATE_LIMIT_ENABLED 环境变量控制）
+    if (isRateLimitEnabled()) {
+      const { allowed, remaining } = await checkRateLimit(supabase, clientIP);
+      
+      if (!allowed) {
+        return new Response(JSON.stringify({ 
+          error: '请求过于频繁，请稍后再试（每分钟最多 10 次）' 
+        }), {
+          status: 429,
+          headers: { 
+            ...corsHeaders, 
+            'Content-Type': 'application/json',
+            'X-RateLimit-Limit': String(RATE_LIMIT_MAX_REQUESTS),
+            'X-RateLimit-Remaining': '0',
+          },
+        });
+      }
     }
 
     const { type, content, industry, jd, style } = await req.json() as RequestBody;
