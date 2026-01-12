@@ -1,11 +1,19 @@
+// 按类别分组的行业列表
 export const INDUSTRIES = [
-  { id: 'programmer', label: '程序员', icon: 'Code2', description: 'Java/Go/前端/全栈' },
-  { id: 'pm', label: '产品经理', icon: 'Lightbulb', description: '产品规划/用户研究' },
-  { id: 'designer', label: 'UI/UX设计师', icon: 'Palette', description: '视觉/交互设计' },
-  { id: 'analyst', label: '数据分析师', icon: 'BarChart3', description: '数据分析/BI' },
-  { id: 'marketing', label: '市场/运营', icon: 'Megaphone', description: '品牌/增长/内容' },
-  { id: 'sales', label: '销售', icon: 'Handshake', description: '客户开发/商务' },
-  { id: 'hr', label: 'HR', icon: 'Users', description: '招聘/组织发展' },
+  // 技术类
+  { id: 'programmer', label: '程序员', icon: 'Code2', description: 'Java/Go/前端/全栈', category: 'tech' },
+  { id: 'devops', label: '运维/SRE', icon: 'Server', description: '自动化运维/云原生', category: 'tech' },
+  { id: 'security', label: '网络安全', icon: 'Shield', description: '安全攻防/合规审计', category: 'tech' },
+  { id: 'qa', label: '测试工程师', icon: 'Bug', description: '自动化测试/质量保障', category: 'tech' },
+  // 产品设计类
+  { id: 'pm', label: '产品经理', icon: 'Lightbulb', description: '产品规划/用户研究', category: 'product' },
+  { id: 'designer', label: 'UI/UX设计师', icon: 'Palette', description: '视觉/交互设计', category: 'product' },
+  { id: 'analyst', label: '数据分析师', icon: 'BarChart3', description: '数据分析/BI', category: 'product' },
+  // 业务职能类
+  { id: 'marketing', label: '市场/运营', icon: 'Megaphone', description: '品牌/增长/内容', category: 'business' },
+  { id: 'sales', label: '销售', icon: 'Handshake', description: '客户开发/商务', category: 'business' },
+  { id: 'hr', label: 'HR', icon: 'Users', description: '招聘/组织发展', category: 'business' },
+  { id: 'accountant', label: '会计/财务', icon: 'Calculator', description: '财务分析/税务筹划', category: 'business' },
 ] as const;
 
 export type IndustryId = typeof INDUSTRIES[number]['id'];
@@ -41,6 +49,63 @@ export const INDUSTRY_CONFIG: Record<IndustryId, IndustryConfig> = {
       '这项目经历写得像记流水账，你是个打字员吗？',
       '看完你的简历，我只记住了你会用 CRUD，这就是你的核心竞争力？',
       '技术栈罗列了一整页，但我看不到任何一个你真正精通的。',
+    ],
+  },
+  devops: {
+    id: 'devops',
+    name: '运维/SRE',
+    dimensions: ['自动化运维', '系统稳定性', '云原生技术', '成本控制', '故障响应', '安全合规'],
+    expertModeName: 'SRE 体系与稳定性建设版',
+    expertStrategy: '强调 SLA/SLO 承诺、CI/CD 流水线效率、容器化编排 (K8s)、可观测性建设、以及降本增效。',
+    dataPlaceholders: [
+      '[系统可用性 (SLA) 提升至 99.99%]',
+      '[部署效率提升 X%]',
+      '[云资源成本降低 Y%]',
+      '[故障恢复时间 (MTTR) 缩短 Z分钟]',
+    ],
+    roastOpeners: [
+      '你只是个会重启服务器的网管吗？我看不到任何自动化思维。',
+      '出了故障全靠人肉填坑？你的容灾方案和监控体系在哪里？',
+      '写了一堆运维脚本就叫 DevOps？CI/CD 流水线呢？可观测性呢？',
+      '云原生时代还在手动部署？你确定不是在维护上古系统？',
+    ],
+  },
+  security: {
+    id: 'security',
+    name: '网络安全',
+    dimensions: ['漏洞挖掘', '防御架构', '应急响应', '合规审计', '渗透测试', '安全开发'],
+    expertModeName: '零信任架构与攻防对抗版',
+    expertStrategy: '强调主动防御体系、SDL (安全开发生命周期)、等级保护/GDPR 合规、以及攻防演练战果。',
+    dataPlaceholders: [
+      '[修复高危漏洞 X个]',
+      '[拦截恶意攻击 Y万次]',
+      '[安全审计通过率 100%]',
+      '[应急响应速度缩短至 Z分钟]',
+    ],
+    roastOpeners: [
+      '你只会用脚本跑现成的扫描器吗？我看不到深度攻防能力。',
+      '等黑客进来了再报警？你的纵深防御体系和威胁情报在哪里？',
+      '安全报告写得像百度百科，有实战经验吗？',
+      '只会做合规检查？真正的红蓝对抗你打过几场？',
+    ],
+  },
+  qa: {
+    id: 'qa',
+    name: '测试工程师',
+    dimensions: ['测试策略', '自动化覆盖', '缺陷分析', '性能测试', '持续集成', '用户视角'],
+    expertModeName: '质量效能与自动化体系版',
+    expertStrategy: '强调测试左移 (Shift Left)、精准测试、自动化覆盖率提升、以及对线上质量 (线上故障率) 的保障。',
+    dataPlaceholders: [
+      '[自动化测试覆盖率达到 X%]',
+      '[线上故障率降低 Y%]',
+      '[回归测试周期缩短 Z天]',
+      '[发现核心性能瓶颈 W个]',
+    ],
+    roastOpeners: [
+      '你只会对着页面点点点的"点工"吗？自动化代码在哪里？',
+      '测了半天上线还是挂，你的测试用例设计逻辑不仅简陋，而且全是漏洞。',
+      '功能测试做得热闹，性能瓶颈一个没发现？',
+      '测试报告写得像流水账，缺陷根因分析在哪里？',
     ],
   },
   pm: {
@@ -169,6 +234,25 @@ export const INDUSTRY_CONFIG: Record<IndustryId, IndustryConfig> = {
       '这简历像 HR 部门的工作说明书，不是你的能力证明。',
     ],
   },
+  accountant: {
+    id: 'accountant',
+    name: '会计/财务',
+    dimensions: ['财务分析', '风险控制', '税务筹划', '合规准则', '资金管理', '报表效率'],
+    expertModeName: 'CFO 视角与财务战略版',
+    expertStrategy: '强调业财融合、现金流优化、审计合规率、税务风险规避及对经营决策的数据支撑。',
+    dataPlaceholders: [
+      '[税务成本节约 X万]',
+      '[月结耗时缩短 Y天]',
+      '[审计一次通过率 100%]',
+      '[资金周转率提升 Z%]',
+    ],
+    roastOpeners: [
+      '你只是个记流水账的算盘吗？我只看到了发票，没看到财务分析。',
+      '我看不到任何风险管控意识，这种简历去大厂第一轮就会被财务总监毙掉。',
+      '除了记账还会什么？业财融合在哪里？',
+      '财务报表做得规规矩矩，但对经营决策有什么支撑？',
+    ],
+  },
 };
 
 // 获取行业配置的辅助函数
@@ -182,3 +266,10 @@ export function getRandomRoastOpener(industryId: string): string {
   const index = Math.floor(Math.random() * config.roastOpeners.length);
   return config.roastOpeners[index];
 }
+
+// 获取分类标签
+export const CATEGORY_LABELS: Record<string, string> = {
+  tech: '技术类',
+  product: '产品设计类',
+  business: '业务职能类',
+};
