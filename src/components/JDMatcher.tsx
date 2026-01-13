@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { ScoreDisplay } from './ScoreDisplay';
 import { useResumeAI } from '@/hooks/useResumeAI';
+import { GAEvents } from '@/lib/analytics';
 
 interface JDMatcherProps {
   resumeContent: string;
@@ -30,6 +31,7 @@ export function JDMatcher({ resumeContent, industry }: JDMatcherProps) {
     const matchResult = await matchJD(resumeContent, jd, industry);
     if (matchResult) {
       setResult(matchResult);
+      GAEvents.jdMatch(matchResult.match_score);
     }
   };
 

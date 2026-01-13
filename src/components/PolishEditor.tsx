@@ -9,6 +9,7 @@ import { useStreamingPolish } from '@/hooks/useStreamingPolish';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { getIndustryConfig } from '@/lib/constants';
+import { GAEvents } from '@/lib/analytics';
 
 interface PolishEditorProps {
   originalContent: string;
@@ -60,6 +61,7 @@ export function PolishEditor({ originalContent, industry, onBack, onExport }: Po
       onComplete: (text) => {
         setPolishedResults(prev => ({ ...prev, [style]: text }));
         setActiveStyle(null);
+        GAEvents.resumePolish(style === 'data' ? 'data_driven' : style);
       },
       onError: () => {
         setActiveStyle(null);
@@ -77,6 +79,7 @@ export function PolishEditor({ originalContent, industry, onBack, onExport }: Po
         setFullPolished(text);
         setStreamingText('');
         toast.success('全篇润色完成！');
+        GAEvents.resumePolish('standard'); // 全篇润色视为标准模式
       },
     });
   };

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { GAEvents } from '@/lib/analytics';
 
 interface ResumeInputProps {
   onSubmit: (content: string) => void;
@@ -46,6 +47,9 @@ export function ResumeInput({ onSubmit, isLoading }: ResumeInputProps) {
     const text = await file.text();
     setContent(text);
     toast.success(`已导入: ${file.name}`);
+    
+    // 追踪简历上传事件
+    GAEvents.resumeUpload(file.size);
   };
 
   const handleDrop = async (e: React.DragEvent) => {

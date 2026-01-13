@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { GAEvents } from '@/lib/analytics';
 
 interface RoastResult {
   score: number;
@@ -81,6 +82,9 @@ export function useResumeAI() {
 
       // 统计使用
       incrementUsageStats();
+      
+      // 追踪分析事件
+      GAEvents.resumeAnalyze(industry);
 
       return data as RoastResult;
     } catch (error) {

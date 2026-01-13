@@ -31,8 +31,13 @@ export function ResumeExporter({ resumeContent, polishedContent, onBack }: Resum
   );
 
   const handleExport = useCallback(async () => {
-    await exportToPdf(resumeRef.current, `简历_${resumeData.name}_${selectedTemplate.name}`);
-  }, [exportToPdf, resumeData.name, selectedTemplate.name]);
+    const templateId = selectedTemplateId as 'minimalist' | 'elite' | 'geek';
+    await exportToPdf(
+      resumeRef.current, 
+      `简历_${resumeData.name}_${selectedTemplate.name}`,
+      templateId
+    );
+  }, [exportToPdf, resumeData.name, selectedTemplate.name, selectedTemplateId]);
 
   return (
     <motion.div

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Code2, Lightbulb, Palette, BarChart3, Megaphone, Handshake, Users, Server, Shield, Bug, Calculator } from 'lucide-react';
 import { INDUSTRIES, CATEGORY_LABELS, type IndustryId } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { GAEvents } from '@/lib/analytics';
 
 const iconMap = {
   Code2,
@@ -57,7 +58,10 @@ export function IndustrySelector({ selected, onSelect }: IndustrySelectorProps) 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  onClick={() => onSelect(industry.id)}
+                  onClick={() => {
+                    onSelect(industry.id);
+                    GAEvents.industrySelect(industry.id);
+                  }}
                   className={cn(
                     'group relative flex flex-col items-center gap-2 p-4 rounded-xl border transition-all duration-300',
                     'hover:border-primary/50 hover:bg-primary/5',

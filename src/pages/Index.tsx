@@ -13,11 +13,14 @@ import { QuickPolish } from '@/components/QuickPolish';
 import { Footer } from '@/components/Footer';
 import { AnalysisLoadingOverlay } from '@/components/AnalysisLoadingOverlay';
 import { useResumeAI } from '@/hooks/useResumeAI';
+import { usePageTracking } from '@/hooks/usePageTracking';
 import type { IndustryId } from '@/lib/constants';
 
 type AppStep = 'landing' | 'input' | 'result' | 'polish' | 'export' | 'quick-polish';
 
 export default function Index() {
+  usePageTracking();
+  
   const [step, setStep] = useState<AppStep>('landing');
   const [selectedIndustry, setSelectedIndustry] = useState<IndustryId | null>(null);
   const [resumeContent, setResumeContent] = useState('');

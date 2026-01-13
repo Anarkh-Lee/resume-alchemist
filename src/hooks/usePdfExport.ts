@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toast } from 'sonner';
+import { GAEvents } from '@/lib/analytics';
 
 function sanitizeFilename(name: string) {
   // Windows/macOS/Linux common illegal filename chars
@@ -16,7 +17,11 @@ export function usePdfExport() {
   const [isExporting, setIsExporting] = useState(false);
 
   const exportToPdf = useCallback(
-    async (element: HTMLElement | null, filename: string = '我的简历') => {
+    async (
+      element: HTMLElement | null, 
+      filename: string = '我的简历',
+      template: 'minimalist' | 'elite' | 'geek' = 'minimalist'
+    ) => {
       if (!element) {
         toast.error('导出失败：无法找到简历内容');
         return;
@@ -113,6 +118,9 @@ export function usePdfExport() {
         }
 
         toast.success('PDF 导出成功！', { id: 'pdf-export' });
+        
+        // 追踪 PDF 导出事件
+        GAEvents.pdfExport(template);
       } catch (error) {
         console.error('PDF export error:', error);
         toast.error('PDF 导出失败，请重试', { id: 'pdf-export' });
